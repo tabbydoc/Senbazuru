@@ -6,3 +6,15 @@ D:\Work Space\In4DataImporter\ExcelImporter\HeaderRecongnizerModelTrainer\bin\De
 D:\Work Space\In4DataImporter\ExcelImporter\HeaderRecongnizerModelTrainer\bin\Debug\HirarchicalExtraction.pdb
 D:\Work Space\In4DataImporter\ExcelImporter\HeaderRecongnizerModelTrainer\obj\Debug\HeaderRecongnizerModelTrainer.exe
 D:\Work Space\In4DataImporter\ExcelImporter\HeaderRecongnizerModelTrainer\obj\Debug\HeaderRecongnizerModelTrainer.pdb
+E:\devel\RSF_2021\Senbazuru\Senbazuru\ExcelImporter\HeaderRecongnizerModelTrainer\bin\Debug\HeaderRecongnizerModelTrainer.exe.config
+E:\devel\RSF_2021\Senbazuru\Senbazuru\ExcelImporter\HeaderRecongnizerModelTrainer\bin\Debug\HeaderRecongnizerModelTrainer.exe
+E:\devel\RSF_2021\Senbazuru\Senbazuru\ExcelImporter\HeaderRecongnizerModelTrainer\bin\Debug\HeaderRecongnizerModelTrainer.pdb
+E:\devel\RSF_2021\Senbazuru\Senbazuru\ExcelImporter\HeaderRecongnizerModelTrainer\bin\Debug\HirarchicalExtraction.exe
+E:\devel\RSF_2021\Senbazuru\Senbazuru\ExcelImporter\HeaderRecongnizerModelTrainer\bin\Debug\HirarchicalExtraction.pdb
+E:\devel\RSF_2021\Senbazuru\Senbazuru\ExcelImporter\HeaderRecongnizerModelTrainer\bin\Debug\HirarchicalExtraction.exe.config
+E:\devel\RSF_2021\Senbazuru\Senbazuru\ExcelImporter\HeaderRecongnizerModelTrainer\obj\Debug\HeaderRecongnizerModelTrainer.csproj.AssemblyReference.cache
+E:\devel\RSF_2021\Senbazuru\Senbazuru\ExcelImporter\HeaderRecongnizerModelTrainer\obj\Debug\HeaderRecongnizerModelTrainer.csproj.SuggestedBindingRedirects.cache
+E:\devel\RSF_2021\Senbazuru\Senbazuru\ExcelImporter\HeaderRecongnizerModelTrainer\obj\Debug\HeaderRecongnizerModelTrainer.csproj.CoreCompileInputs.cache
+E:\devel\RSF_2021\Senbazuru\Senbazuru\ExcelImporter\HeaderRecongnizerModelTrainer\obj\Debug\HeaderRecongnizerModelTrainer.csproj.CopyComplete
+E:\devel\RSF_2021\Senbazuru\Senbazuru\ExcelImporter\HeaderRecongnizerModelTrainer\obj\Debug\HeaderRecongnizerModelTrainer.exe
+E:\devel\RSF_2021\Senbazuru\Senbazuru\ExcelImporter\HeaderRecongnizerModelTrainer\obj\Debug\HeaderRecongnizerModelTrainer.pdb

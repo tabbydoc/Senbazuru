@@ -5,7 +5,37 @@
       "ProjectGuid": "a67a276d-a379-4069-af50-56ec121523cc",
       "DisplayName": "HirarchicalExtraction",
       "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Прочие файлы",
+      "ColorIndex": -1
+    },
+    "856cd5b8-f7ee-4e1b-97b6-3714bdf4d8b5": {
+      "ProjectGuid": "856cd5b8-f7ee-4e1b-97b6-3714bdf4d8b5",
+      "DisplayName": "FrameFinderConsole",
+      "ColorIndex": 1
+    },
+    "3632874f-730d-4049-9773-6106c6ea69b7": {
+      "ProjectGuid": "3632874f-730d-4049-9773-6106c6ea69b7",
+      "DisplayName": "FrameFinder",
+      "ColorIndex": 2
+    },
+    "348c860e-81a2-4690-8517-de00cdd5ec62": {
+      "ProjectGuid": "348c860e-81a2-4690-8517-de00cdd5ec62",
+      "DisplayName": "HeaderRecongnizerModelTrainer",
+      "ColorIndex": 3
+    },
+    "2031df9f-c108-4757-a4e7-f812bc0da5e4": {
+      "ProjectGuid": "2031df9f-c108-4757-a4e7-f812bc0da5e4",
+      "DisplayName": "Trainers",
+      "ColorIndex": 4
+    },
+    "208e3c1f-dc24-4f6c-8e1f-dbb8e56f4e34": {
+      "ProjectGuid": "208e3c1f-dc24-4f6c-8e1f-dbb8e56f4e34",
+      "DisplayName": "Algorithms",
+      "ColorIndex": 5
     }
   },
-  "NextColorIndex": 1
+  "NextColorIndex": 6
 }

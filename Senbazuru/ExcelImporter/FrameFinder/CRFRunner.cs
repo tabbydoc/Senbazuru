@@ -17,17 +17,17 @@ namespace FrameFinder
 
         public CRFRunner()
         {
-            this.crfTrainScript = Config.CRFPPDIR + "/crf_learn";
-            this.crfTestScript = Config.CRFPPDIR + "/crf_test";
-            this.crfModelPath = Config.CRFTEMPDIR + "/model";
+            this.crfTrainScript = Path.Combine(Config.CRFPPDIR, "crf_learn");
+            this.crfTestScript = Path.Combine(Config.CRFPPDIR, "crf_test");
+            this.crfModelPath = Path.Combine(Config.CRFTEMPDIR, "model");
             this.cost = 4.0;
         }
 
         public CRFRunner(double cost)
         {
-            this.crfTrainScript = Config.CRFPPDIR + "/crf_learn";
-            this.crfTestScript = Config.CRFPPDIR + "/crf_test";
-            this.crfModelPath = Config.CRFTEMPDIR + "/model";
+            this.crfTrainScript = Path.Combine(Config.CRFPPDIR, "crf_learn");
+            this.crfTestScript = Path.Combine(Config.CRFPPDIR, "crf_test");
+            this.crfModelPath = Path.Combine(Config.CRFTEMPDIR, "model");
             this.cost = cost;
         }
 

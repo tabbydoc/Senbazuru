@@ -15,7 +15,7 @@ namespace FrameFinder
             string predictPath = Config.CRFTMPPREDICT;
             string fileName = Path.GetFileName(predictPath);
             Console.WriteLine("Generating final output");
-            String outPath = Config.OUTPUTDIR + "/" + workbookName + "____" + sheetName + "____" + counter;
+            String outPath = Path.Combine(Config.OUTPUTDIR, workbookName+ "____" + sheetName + "____" + counter);
             StreamReader fin = new StreamReader(predictPath);
             StreamWriter fout = new StreamWriter(outPath);
             String line;
