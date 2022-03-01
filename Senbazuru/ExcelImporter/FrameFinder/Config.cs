@@ -10,7 +10,8 @@ namespace FrameFinder
     class Config
     {
         // this could be modified to absolute path
-        public static String BASEDIR = "E:\\devel\\RSF_2021\\Senbazuru\\Senbazuru\\ExcelImporter\\resources\\FrameFinder\\";
+        public static String BASEDIR = Path.GetFullPath("../../../resources/FrameFinder/");
+        //public static String BASEDIR = "E:\\devel\\RSF_2021\\Senbazuru\\Senbazuru\\ExcelImporter\\resources\\FrameFinder\\";
         //"../../../resources/FrameFinder";
         private static String dat = Path.Combine(BASEDIR, "data");
         // directory to store the original spreadsheets
