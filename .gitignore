@@ -41,3 +41,12 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+#Prediction results
+/Senbazuru/ExcelImporter/resources/FrameFinder/data/results/*
+/Senbazuru/ExcelImporter/Senbazuru/bin/
+/Senbazuru/ExcelImporter/Interfaces/bin/
+/Senbazuru/ExcelImporter/HirarchicalExtraction/bin
+/Senbazuru/ExcelImporter/HeaderRecongnizerModelTrainer/bin
+/Senbazuru/ExcelImporter/FrameFinderConsole/bin
+/Senbazuru/ExcelImporter/FrameFinder/bin
