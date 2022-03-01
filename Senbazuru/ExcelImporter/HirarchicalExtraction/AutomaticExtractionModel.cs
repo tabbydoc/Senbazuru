@@ -15,7 +15,7 @@ namespace Senbazuru.HirarchicalExtraction
 
         public AutomaticExtractionModel() { }
 
-        private string MODEL_FILE = @"..\..\..\resources\HirarchicalExtraction\Model\Hirarchical.model";
+        private string MODEL_FILE = Path.GetFullPath("../../../resources/HirarchicalExtraction/Model/Hirarchical.model");
 
         /// <summary>
         /// Training the model
@@ -120,6 +120,7 @@ namespace Senbazuru.HirarchicalExtraction
                 for (int i = 0; i < this.model.NUM_NODE_POTENTIAL_FEATURE_NUMBER; i++)
                 {
                     string value = reader.ReadLine();
+                    value = value.Replace(".", ",");
                     this.model.WeightListNodeFeature.Add(double.Parse(value));
                 }
             }

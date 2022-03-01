@@ -11,6 +11,7 @@ namespace Senbazuru.HirarchicalExtraction
     {
         
         static void Main(string[] args)
+            
         {
         }
     }

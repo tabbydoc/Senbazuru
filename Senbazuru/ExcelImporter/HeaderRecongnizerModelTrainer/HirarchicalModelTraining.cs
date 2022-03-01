@@ -11,7 +11,7 @@ namespace Senbazuru.HirarchicalExtraction
 {
     public class HirarchicalModel
     {
-        static string Filename = @"..\..\..\resources\HirarchicalExtraction\TrainingData";
+        static string Filename = Path.GetFullPath("../../../resources/HirarchicalExtraction/TrainingData");
         Application excelapp = new Application();
 
         // We obtain the 1-th sheet
