@@ -34,14 +34,15 @@ namespace Senbazuru.HirarchicalExtraction
             this.sheet = sheet;
         }
 
-        public FeatureConstructer(Worksheet sheet, Range AttributeRange)
+        public FeatureConstructer(Worksheet sheet, Range AttributeRange, bool SampleConstruction = false)
         {
-            this.AnotationPairConstruction(AttributeRange, sheet,false);
-            this.AnotationPairEdgeConstruction(false);
+            this.AnotationPairConstruction(AttributeRange, sheet, SampleConstruction);
+            this.AnotationPairEdgeConstruction(SampleConstruction);
             this.NodeFeatureVectorConstruction();
             this.EdgeFeatureVectorConstruction();
             this.sheet = sheet;
         }
+
 
         private void AnotationPairConstruction(Range AttributeRange, Worksheet sheet, List<Tuple<int, int>> indexPairList)
         {
