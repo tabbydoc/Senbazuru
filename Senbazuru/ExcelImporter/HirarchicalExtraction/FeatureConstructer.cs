@@ -34,9 +34,9 @@ namespace Senbazuru.HirarchicalExtraction
             this.sheet = sheet;
         }
 
-        public FeatureConstructer(Worksheet sheet, Range AttributeRange)
+        public FeatureConstructer(Worksheet sheet, Range AttributeRange, bool sampleConstruction = false)
         {
-            this.AnotationPairConstruction(AttributeRange, sheet,false);
+            this.AnotationPairConstruction(AttributeRange, sheet, sampleConstruction);
             this.AnotationPairEdgeConstruction(false);
             this.NodeFeatureVectorConstruction();
             this.EdgeFeatureVectorConstruction();
@@ -169,7 +169,9 @@ namespace Senbazuru.HirarchicalExtraction
                 featureVector.Add(Features.BFeatureBoldDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
                 featureVector.Add(Features.BFeatureItalicDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
                 featureVector.Add(Features.BFeatureUnderlineDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                
+                featureVector.Add(Features.BFeatureBackgroundDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
+                                
+
                 NodePotentialFeatureVector nodepotentialfeaturevector = new NodePotentialFeatureVector(featureVector);
                 anotationPairList[i].nodepotentialfeaturevector = nodepotentialfeaturevector;
             }

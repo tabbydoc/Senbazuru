@@ -53,6 +53,7 @@
     <Compile Include="AnotationPairEdge.cs" />
     <Compile Include="AttributeTree.cs" />
     <Compile Include="AutomaticExtractionModel.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="EdgePotentialFeatureVector.cs" />
     <Compile Include="ExcelReaderInterop.cs" />
     <Compile Include="FeatureConstructer.cs" />
@@ -64,6 +65,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FrameFinder\FrameFinder.csproj">
+      <Project>{3632874F-730D-4049-9773-6106C6EA69B7}</Project>
+      <Name>FrameFinder</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

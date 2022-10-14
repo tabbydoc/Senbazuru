@@ -274,6 +274,14 @@ namespace Senbazuru.HirarchicalExtraction
             return 0;
         }
 
+        //Additional features
+        //Background differnce 
+        public int BFeatureBackgroundDiffer(IList<Range> celllist, int indexParent, int indexChild)
+        {
+            return (celllist[indexParent].Interior.ColorIndex != celllist[indexChild].Interior.ColorIndex) ? 1 : 0;
+
+        }
+
         /*Below are auxiliary method*/
         private string getValueType(string cellValue)
         {

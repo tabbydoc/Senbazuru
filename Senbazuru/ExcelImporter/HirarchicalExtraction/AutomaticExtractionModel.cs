@@ -91,6 +91,10 @@ namespace Senbazuru.HirarchicalExtraction
 
 
         /*Save and Load Model from Model file*/
+        public void SaveModel(string modelFile) {
+            this.MODEL_FILE = modelFile;
+            SaveModel();
+        }
         public void SaveModel()
         {
             StreamWriter writer = new StreamWriter(this.MODEL_FILE);

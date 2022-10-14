@@ -12,6 +12,7 @@ namespace Senbazuru.HirarchicalExtraction
     public class ExcelReaderInterop
     {
         Application excelapp;
+        private object[,] valueArray;
         public ExcelReaderInterop()
         {
             excelapp = new Application();
@@ -60,13 +61,15 @@ namespace Senbazuru.HirarchicalExtraction
                 //
                 Range excelRange = sheet.UsedRange;
                 
-                object[,] valueArray = (object[,])excelRange.get_Value(
+                valueArray = (object[,])excelRange.get_Value(
                     XlRangeValueDataType.xlRangeValueDefault);
                 
                 
                 //
                 // Do something with the data in the array with a custom method.
                 //
+                /*
+                 * Temporary commented
                 for (int i = 1; i < valueArray.Length; i++)
                 {
                     Range cell = sheet.Cells[i, 1];
@@ -81,7 +84,13 @@ namespace Senbazuru.HirarchicalExtraction
                     }
                     Console.WriteLine(valueArray[i,1].ToString());
                 }
+                */
             }
+        }
+
+        public object[,] GetCellsAsArray
+        {
+            get{ return valueArray; }
         }
     }
 }

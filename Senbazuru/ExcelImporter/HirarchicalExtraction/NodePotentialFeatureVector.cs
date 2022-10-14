@@ -16,5 +16,15 @@ namespace Senbazuru.HirarchicalExtraction
             this.features = features ;
             this.label = label ;
         }
+
+        public IList<int> getFeatures() { 
+            return features;
+        }
+
+        //Add for Debug: Feature list in string
+        public string FeatureVectorInString()
+        {
+            return string.Join("; ", features);
+        }
     }
 }
