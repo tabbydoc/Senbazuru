@@ -61,13 +61,16 @@ namespace Senbazuru.HirarchicalExtraction
                     {
 
                         IList<int> npv = anotationPairList[i].nodepotentialfeaturevector.getFeatures();
-                        if ((npv[2] == 1 || npv[11] == 1 || npv[12] == 1 || npv[13] == 1 || npv[14] == 1 ) && (npv[3] == 1))
+
+                        if ((npv[2] == 1 || npv[11] == 1 || npv[12] == 1 || npv[13] == 1 || npv[14] == 1 ) && (npv[1] == 0) && (npv[3] == 1) && (npv[15] == 0))
                             anotationPairList[i].nodepotentialfeaturevector.label = true;
-                        if (anotationPairList[i].nodepotentialfeaturevector.label == true) { 
+                        //Debug information
+                        //if (anotationPairList[i].nodepotentialfeaturevector.label == true) { 
                             Debug.Write("Parent: " + anotationPairList[i].indexParent + " Child: " + anotationPairList[i].indexChild);
                             Debug.Write(" - ");
-                            Debug.WriteLine(anotationPairList[i].nodepotentialfeaturevector.FeatureVectorInString());
-                        }
+                            Debug.WriteLine(anotationPairList[i].nodepotentialfeaturevector.FeatureVectorInString() + " " + anotationPairList[i].nodepotentialfeaturevector.label);
+                            
+                        //}
                     }
                     
                     

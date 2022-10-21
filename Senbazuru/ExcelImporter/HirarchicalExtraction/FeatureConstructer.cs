@@ -170,7 +170,7 @@ namespace Senbazuru.HirarchicalExtraction
                 featureVector.Add(Features.BFeatureItalicDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
                 featureVector.Add(Features.BFeatureUnderlineDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
                 featureVector.Add(Features.BFeatureBackgroundDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                                
+                featureVector.Add(Features.BFeatureIsEmptCell(this.celllist, anotationPairList[i].indexParent));
 
                 NodePotentialFeatureVector nodepotentialfeaturevector = new NodePotentialFeatureVector(featureVector);
                 anotationPairList[i].nodepotentialfeaturevector = nodepotentialfeaturevector;

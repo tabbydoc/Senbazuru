@@ -282,6 +282,11 @@ namespace Senbazuru.HirarchicalExtraction
 
         }
 
+        public int BFeatureIsEmptCell(IList<Range> celllist, int indexCell) {
+            string cellValue = (celllist[indexCell].Text as string);
+            return cellValue.Length == 0 ? 1 : 0;
+        }
+
         /*Below are auxiliary method*/
         private string getValueType(string cellValue)
         {
