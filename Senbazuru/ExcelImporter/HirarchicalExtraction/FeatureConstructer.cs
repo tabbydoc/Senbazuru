@@ -170,10 +170,25 @@ namespace Senbazuru.HirarchicalExtraction
                 featureVector.Add(Features.BFeatureItalicDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
                 featureVector.Add(Features.BFeatureUnderlineDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
                 featureVector.Add(Features.BFeatureBackgroundDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureIsEmptCell(this.celllist, anotationPairList[i].indexParent));
-
+                featureVector.Add(Features.BFeatureParentIsEmptyCell(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
+                featureVector.Add(Features.BFeatureChildIsEmptyCell(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
                 NodePotentialFeatureVector nodepotentialfeaturevector = new NodePotentialFeatureVector(featureVector);
                 anotationPairList[i].nodepotentialfeaturevector = nodepotentialfeaturevector;
+                //Check adjacent pair for child vector features
+                IList<int> npfv = nodepotentialfeaturevector.getFeatures();
+                if ((npfv[2] == 1 //Atribute parent's identation greater that Child
+                            || npfv[4] == 1 //Child’s font size is smaller than parent’s
+                            || npfv[11] == 1 //One cell has BOLD font and one not
+                            || npfv[12] == 1 //One cell has ITALIC font and one not
+                            || npfv[13] == 1 //One cell has UNDERLINE font and one not
+                            || npfv[14] == 1 //Pair cells have different background)
+                    )
+                    && (npfv[0] == 1) //Pair with adjacent indexes
+                    && (npfv[15] == 0) //Parent is not empty
+                    && (npfv[16] == 0)
+                    )
+                    anotationPairList[i].FeaturevectorOfFirstChild = nodepotentialfeaturevector;
+                //anotationPairList[i].
             }
         }
 
