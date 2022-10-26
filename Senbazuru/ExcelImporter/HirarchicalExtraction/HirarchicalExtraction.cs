@@ -50,8 +50,8 @@ namespace Senbazuru.HirarchicalExtraction
                 sheet = workbook.Sheets[SHEETNUM];
                 ffFile = Path.Combine(FF_RESULTS_DIR, file.Name + "____" + sheet.Name + "____" + tblNum);
                 ffData = GetFFData(ffFile, sheet);
-                ModelFeatures modelFeatures = new ModelFeatures();  
-                
+                ModelFeatures modelFeatures = new ModelFeatures();
+                NodePotentialFeatureVector npfv = null;
                 
                 constructer = new FeatureConstructer(sheet, ffData["range"], true);
                 List<AnotationPair> anotationPairList = constructer.anotationPairList;
@@ -61,16 +61,37 @@ namespace Senbazuru.HirarchicalExtraction
                     {
 
                         IList<int> npv = anotationPairList[i].nodepotentialfeaturevector.getFeatures();
+                        if (anotationPairList[i].FeaturevectorOfFirstChild != null)
+                            npfv = anotationPairList[i].nodepotentialfeaturevector;
 
-                        if ((npv[2] == 1 || npv[11] == 1 || npv[12] == 1 || npv[13] == 1 || npv[14] == 1 ) && (npv[1] == 0) && (npv[3] == 1) && (npv[15] == 0))
+                        if (
+                            (npv[2] == 1 //Atribute parent's identation greater that Child
+                            || npv[4]== 1 //Child’s font size is smaller than parent’s
+                            || npv[11] == 1 //One cell has BOLD font and one not
+                            || npv[12] == 1 //One cell has ITALIC font and one not
+                            || npv[13] == 1 //One cell has UNDERLINE font and one not
+                            || npv[14] == 1 //Pair cells have different background
+                            
+                            ) 
+                                && (npv[1] == 0) //There are no middle empty cell
+                                && (npv[3] == 1) //Child’s row index is greater than parent’s
+                                && npv[5] == 0 //Has not middle cell containing keywords like "total" or ":" semicolon
+                                && npv[6] == 0 //Has not middle cell with indentation larger the pair’s
+                                && npv[7] == 0
+                                && npv[8] == 0 //Has not middle cell with indentation between the pair’s
+                                && (npv[15] == 0) //Parent is not empty
+                                && (npv[16] == 0) //Child is not empty
+
+                            )
                             anotationPairList[i].nodepotentialfeaturevector.label = true;
                         //Debug information
+                        if ((anotationPairList[i].indexParent == 10) && (anotationPairList[i].indexChild ==11 || anotationPairList[i].indexChild == 14)) { 
                         //if (anotationPairList[i].nodepotentialfeaturevector.label == true) { 
                             Debug.Write("Parent: " + anotationPairList[i].indexParent + " Child: " + anotationPairList[i].indexChild);
                             Debug.Write(" - ");
                             Debug.WriteLine(anotationPairList[i].nodepotentialfeaturevector.FeatureVectorInString() + " " + anotationPairList[i].nodepotentialfeaturevector.label);
                             
-                        //}
+                        }
                     }
                     
                     
