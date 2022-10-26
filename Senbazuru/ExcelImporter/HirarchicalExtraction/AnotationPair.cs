@@ -14,7 +14,9 @@ namespace Senbazuru.HirarchicalExtraction
         public int indexChild = 0;
 
         // Feature Vector denotes the list of feature values.
-        public NodePotentialFeatureVector nodepotentialfeaturevector = null ;
+        public NodePotentialFeatureVector nodepotentialfeaturevector = null;
+        //Feature Vaector of the first Children (if applicable)
+        private NodePotentialFeatureVector nodepotentialfeaturevectorOfFirstChild = null;
 
         public AnotationPair(IList<Range> CellList, int indexParent, int indexChild)
         {
@@ -32,5 +34,16 @@ namespace Senbazuru.HirarchicalExtraction
         {
             return pair1.indexChild != pair2.indexChild || pair1.indexParent == pair2.indexParent ? true : false;
         }
+
+        //FeaturevectorOfFirstChild is needed for comparison with 
+        public NodePotentialFeatureVector FeaturevectorOfFirstChild {
+            get {
+                return this.nodepotentialfeaturevectorOfFirstChild;
+            }
+            set {
+                this.nodepotentialfeaturevectorOfFirstChild = value; 
+            } 
+        }
+
     }
 }

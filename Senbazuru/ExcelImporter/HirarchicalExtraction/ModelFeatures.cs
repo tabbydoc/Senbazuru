@@ -241,7 +241,11 @@ namespace Senbazuru.HirarchicalExtraction
         /* These two features are different */
         public int BFeatureStyleAdjacent(IList<Range> celllist, int indexParent, int indexChild)
         {
-            return 0;
+            Range cellParent = celllist[indexParent];
+            Range cellChild = celllist[indexChild];
+
+            return 0;           
+
         }
 
         public int BFeatureParentRoot(IList<Range> celllist, int indexParent, int indexChild)
@@ -281,12 +285,17 @@ namespace Senbazuru.HirarchicalExtraction
             return (celllist[indexParent].Interior.ColorIndex != celllist[indexChild].Interior.ColorIndex) ? 1 : 0;
 
         }
-
-        public int BFeatureIsEmptCell(IList<Range> celllist, int indexCell) {
-            string cellValue = (celllist[indexCell].Text as string);
+        //Parent cell in empty
+        public int BFeatureParentIsEmptyCell(IList<Range> celllist, int indexParent, int indexChild) {
+            string cellValue = (celllist[indexParent].Text as string);
             return cellValue.Length == 0 ? 1 : 0;
         }
-
+        //Child cell in empty
+        public int BFeatureChildIsEmptyCell(IList<Range> celllist, int indexParent, int indexChild)
+        {
+            string cellValue = (celllist[indexChild].Text as string);
+            return cellValue.Length == 0 ? 1 : 0;
+        }
         /*Below are auxiliary method*/
         private string getValueType(string cellValue)
         {
