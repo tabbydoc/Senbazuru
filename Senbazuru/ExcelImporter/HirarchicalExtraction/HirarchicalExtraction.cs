@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.Office.Interop.Excel;
-using System.IO;
-using System.Diagnostics;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 
 namespace Senbazuru.HirarchicalExtraction
 {
@@ -18,7 +18,7 @@ namespace Senbazuru.HirarchicalExtraction
         static void Main(string[] args)
         {
             int SHEETNUM = 1; //SHEETNUM temporary for testing - only 1-st sheet
-            
+
             //Application APP = new Application();
             //ExcelReaderInterop excelReader;
             Application excelapp = new Application();
@@ -30,11 +30,11 @@ namespace Senbazuru.HirarchicalExtraction
             String ffFile;
             FeatureConstructer constructer;
             Dictionary<string, string> par = Utils.NamedParams(args);
-            
+
 
 
             var ffData = new Dictionary<string, Range>();
-            
+
             int tblNum = 0; //0 value for test only - The one table on the sheet
 
             AutomaticExtractionModel model = new AutomaticExtractionModel();
@@ -50,51 +50,88 @@ namespace Senbazuru.HirarchicalExtraction
                 sheet = workbook.Sheets[SHEETNUM];
                 ffFile = Path.Combine(FF_RESULTS_DIR, file.Name + "____" + sheet.Name + "____" + tblNum);
                 ffData = GetFFData(ffFile, sheet);
+                if (ffData == null)
+                {
+                    throw new InvalidDataException("No data about table postiton");
+                }
+
                 ModelFeatures modelFeatures = new ModelFeatures();
-                NodePotentialFeatureVector npfv = null;
-                
+
                 constructer = new FeatureConstructer(sheet, ffData["range"], true);
                 List<AnotationPair> anotationPairList = constructer.anotationPairList;
-                if (par["alg"] == "1") {
+                if (par["alg"] == "1")
+                {
                     //Algorithm 1: Classification
                     for (int i = 0; i < anotationPairList.Count; i++)
                     {
+                        /*
+                        if ((anotationPairList[i].indexParent == 11) && (anotationPairList[i].indexChild == 15)) {
+                            Debug.WriteLine("alarm!");
+                        }*/
 
                         IList<int> npv = anotationPairList[i].nodepotentialfeaturevector.getFeatures();
-                        if (anotationPairList[i].FeaturevectorOfFirstChild != null)
-                            npfv = anotationPairList[i].nodepotentialfeaturevector;
-
                         if (
                             (npv[2] == 1 //Atribute parent's identation greater that Child
-                            || npv[4]== 1 //Child’s font size is smaller than parent’s
+                            || npv[4] == 1 //Child’s font size is smaller than parent’s
                             || npv[11] == 1 //One cell has BOLD font and one not
                             || npv[12] == 1 //One cell has ITALIC font and one not
                             || npv[13] == 1 //One cell has UNDERLINE font and one not
                             || npv[14] == 1 //Pair cells have different background
-                            
                             ) 
-                                && (npv[1] == 0) //There are no middle empty cell
-                                && (npv[3] == 1) //Child’s row index is greater than parent’s
-                                && npv[5] == 0 //Has not middle cell containing keywords like "total" or ":" semicolon
-                                && npv[6] == 0 //Has not middle cell with indentation larger the pair’s
-                                && npv[7] == 0
-                                && npv[8] == 0 //Has not middle cell with indentation between the pair’s
-                                && (npv[15] == 0) //Parent is not empty
-                                && (npv[16] == 0) //Child is not empty
-
+                            &&  (npv[15] == 0) //Parent is not empty
+                            && (npv[16] == 0) //Child is not empty
                             )
-                            anotationPairList[i].nodepotentialfeaturevector.label = true;
+                            // Main features, highlited differences in Parent-Child pair
+                        {
+                            if (npv[0] == 1) //Adjacent cells
+                            {
+                                //Potentionally this is a pair
+                                anotationPairList[i].nodepotentialfeaturevector.label = true;
+                            }
+                            else if ((npv[1] == 0) //There are no middle empty cell
+                                    && (npv[3] == 1) //Child’s row index is greater than parent’s
+                                    && (npv[5] == 0) //Has not middle cell containing keywords like "total" or ":" semicolon
+                                    && (npv[7] == 0) //There isn't middle cell with indentation between the pair’s
+                                    && (npv[17] == 0)
+                                    )
+                            {
+                                //Compare with adjacent pair
+                                for (int j = i-1; j >= 0; j--) {
+                                    //Review pair with this parent only
+                                    if (anotationPairList[j].indexParent == anotationPairList[i].indexParent)
+                                    {
+                                        if (anotationPairList[j].nodepotentialfeaturevector.label == true)
+                                        {
+                                            IList<int> npvAdjacent = anotationPairList[j].nodepotentialfeaturevector.getFeatures();
+                                            if (anotationPairList[i].nodepotentialfeaturevector.similarityOfVectors(npvAdjacent) == true)
+                                            {
+                                                anotationPairList[i].nodepotentialfeaturevector.label = true;
+                                                break; //The first candidate pair is needed
+                                            }
+                                        }
+                                        //else break;
+                                    }
+                                    else break;
+                                }
+                            }
+                            
+                            
+                            
+                        }
                         //Debug information
-                        if ((anotationPairList[i].indexParent == 10) && (anotationPairList[i].indexChild ==11 || anotationPairList[i].indexChild == 14)) { 
-                        //if (anotationPairList[i].nodepotentialfeaturevector.label == true) { 
+                        //if ((anotationPairList[i].indexParent == 10) && (anotationPairList[i].nodepotentialfeaturevector.label))
+                        //if ((anotationPairList[i].indexParent == 10) && (anotationPairList[i].indexChild == 11 || anotationPairList[i].indexChild == 14|| anotationPairList[i].indexChild == 17))
+                        if (anotationPairList[i].nodepotentialfeaturevector.label)
+                        {
+                            //if (anotationPairList[i].nodepotentialfeaturevector.label == true) { 
                             Debug.Write("Parent: " + anotationPairList[i].indexParent + " Child: " + anotationPairList[i].indexChild);
                             Debug.Write(" - ");
                             Debug.WriteLine(anotationPairList[i].nodepotentialfeaturevector.FeatureVectorInString() + " " + anotationPairList[i].nodepotentialfeaturevector.label);
-                            
+
                         }
                     }
-                    
-                    
+
+
                 }
                 /*
                 List<AnotationPair> anotationPairList = constructer.anotationPairList;
@@ -127,13 +164,16 @@ namespace Senbazuru.HirarchicalExtraction
             }
         }
 
+
+
         static Dictionary<string, Range> GetFFData(string fileName, Worksheet sheet)
         {
             string[] lineFFRes;
             int labelCol = 1;
-            string lastPredictLine="1";
+            string lastPredictLine = "1";
             int startIdx = 0;
-            Dictionary<string, Range> result = new Dictionary<string, Range> {
+            Dictionary<string, Range> result = new Dictionary<string, Range>
+            {
                 ["startCell"] = null,
                 ["endCell"] = null,
                 ["range"] = null
@@ -146,15 +186,15 @@ namespace Senbazuru.HirarchicalExtraction
                 {
                     lineFFRes = s.Split('\t');
                     if ((lineFFRes[1].Trim()).Equals("Blank"))
-                            continue;
-                    if ((result["startCell"] == null) && ((lineFFRes[1].Trim()).Equals("Data"))) 
+                        continue;
+                    if ((result["startCell"] == null) && ((lineFFRes[1].Trim()).Equals("Data")))
                     {
                         //Write info about initial data cell
                         result["startCell"] = sheet.Cells[lineFFRes[0], labelCol];
-                     
+
                     }
-                    if (result["startCell"] != null) 
-                        {
+                    if (result["startCell"] != null)
+                    {
                         if ((lineFFRes[1].Trim()).Equals("Data"))
                             result["endCell"] = sheet.Cells[lineFFRes[0], labelCol];
                         else

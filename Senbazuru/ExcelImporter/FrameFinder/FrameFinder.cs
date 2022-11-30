@@ -1,14 +1,9 @@
-﻿using Microsoft.Office.Interop.Excel;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FrameFinder
 {
-    class FrameFinder
+    public class FrameFinder
     {
         /*
          * This method shows how to use the frame finder.
@@ -25,9 +20,11 @@ namespace FrameFinder
                 MSheet mSheet = eachTable.Item3;
                 crfRunner.Predict(workbookName, sheetName);
                 TransformOutput.Run(workbookName, sheetName, mSheet);
-                // PrintLabel(mSheet.Labels);
+                //PrintLabel(mSheet.Labels);
                 HorizontalHierarchyExtractor hhe = new HorizontalHierarchyExtractor();
                 hhe.ExtractFromMSheet(mSheet);
+
+
             }
         }
 

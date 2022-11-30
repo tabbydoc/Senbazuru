@@ -1,10 +1,6 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Office.Interop.Excel;
 
 namespace FrameFinder
 {
@@ -18,8 +14,8 @@ namespace FrameFinder
         private int stRow;
         private int stCol;
 
-        public string Text 
-        { 
+        public string Text
+        {
             get { return this.txt; }
             set { this.txt = value; }
         }

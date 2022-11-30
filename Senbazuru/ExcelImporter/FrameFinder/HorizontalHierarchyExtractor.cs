@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Office.Interop.Excel;
 
 namespace FrameFinder
 {
@@ -29,7 +25,7 @@ namespace FrameFinder
             int leftCol = mSheet.StartCol;
             int downRow = mSheet.StartRow + mSheet.RowNum - 1;
             int rightCol = mSheet.StartCol + mSheet.ColNum - 1;
-            
+
             for (int j = leftCol; j <= rightCol; ++j)
             {
                 for (int i = upRow; i <= downRow; ++i)
@@ -114,6 +110,7 @@ namespace FrameFinder
                         }
                         vis[row - mSheet.StartRow, col - mSheet.StartCol] = true;
                         mSheet.Nodes.Add(new Tuple<int, int>(row, col), new HeaderNode(row, col));
+
                     }
                 }
             }
@@ -130,15 +127,24 @@ namespace FrameFinder
                     mSheet.Nodes[key].Parent = mSheet.RootNode;
                 }
             }
-            // this.printStructure(mSheet.RootNode, "");
+            //this.printStructure2(mSheet.RootNode, "");
         }
 
         private void printStructure(HeaderNode node, string space)
         {
-            Console.WriteLine("{0} {1} {2}", space, node.Row, node.Col);
+            Console.WriteLine("!{0} {1} {2}", space, node.Row, node.Col);
             foreach (HeaderNode child in node.Children)
             {
                 this.printStructure(child, space + " ");
+            }
+        }
+
+        private void printStructure2(HeaderNode node, string space)
+        {
+            Console.WriteLine("Row:{0} Col:{1} Indent:{2}", node.Row, node.Col, space.Length);
+            foreach (HeaderNode child in node.Children)
+            {
+                this.printStructure2(child, space + " ");
             }
         }
     }

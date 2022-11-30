@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Senbazuru.HirarchicalExtraction
 {
@@ -13,11 +9,12 @@ namespace Senbazuru.HirarchicalExtraction
 
         public NodePotentialFeatureVector(IList<int> features, bool label = false)
         {
-            this.features = features ;
-            this.label = label ;
+            this.features = features;
+            this.label = label;
         }
 
-        public IList<int> getFeatures() { 
+        public IList<int> getFeatures()
+        {
             return features;
         }
 
@@ -27,11 +24,17 @@ namespace Senbazuru.HirarchicalExtraction
             return string.Join("; ", features);
         }
         //Compare feature vectors
-        public static bool operator == (NodePotentialFeatureVector fv1, NodePotentialFeatureVector fv2) {
+        public static bool operator ==(NodePotentialFeatureVector features1, NodePotentialFeatureVector features2)
+        {
             //Ignore adjacent feature
-            for (int i = 1; i < fv1.getFeatures().Count-1; i++)
+            if ((features1 == null) && (features2 == null))
+                return true;
+            if (((features1 == null) && (features2 != null)) || ((features1 != null) && (features2 == null)))
+                return false;
+
+            for (int i = 1; i < features1.getFeatures().Count - 1; i++)
             {
-                if (fv1.getFeatures()[i] != fv2.getFeatures()[i])
+                if (features1.getFeatures()[i] != features2.getFeatures()[i])
                     return false;
             }
             return true;
@@ -40,6 +43,11 @@ namespace Senbazuru.HirarchicalExtraction
         public static bool operator !=(NodePotentialFeatureVector features1, NodePotentialFeatureVector features2)
         {
             //Ignore adjacent feature
+            if ((features1 == null) && (features2 == null))
+                return false;
+            if (((features1 == null) && (features2 != null)) || ((features1 != null) && (features2 == null)))
+                return false;
+
             for (int i = 1; i < features1.getFeatures().Count - 1; i++)
             {
                 if (features1.getFeatures()[i] == features2.getFeatures()[i])
@@ -47,5 +55,29 @@ namespace Senbazuru.HirarchicalExtraction
             }
             return true;
         }
+
+        //2 pairs similarity
+        public bool similarityOfVectors(IList<int> npv) {
+            if ((npv != null) && (features.Count == npv.Count)
+                && (features[2] == npv[2]) //Similar identation type
+                && (features[4] == npv[4]) //Similar child font size smaler
+                && (features[11] == npv[11]) //Similar font bold
+                && (features[12] == npv[12]) //Similar italic
+                && (features[13] == npv[13]) //Similar underline
+                && (features[14] == npv[14]) //Similar backgorund
+                )
+                return true;
+            
+            {
+
+                return true;
+            }
+
+
+            return false;
+        }
+
+
+  
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Senbazuru.HirarchicalExtraction
 {
@@ -22,8 +20,8 @@ namespace Senbazuru.HirarchicalExtraction
         public IList<double> WeightListEdgeFeature = new List<double>();
         public IList<double> WeightListNodeFeature = new List<double>();
 
-        public Model() {}
-        
+        public Model() { }
+
         /// <summary>
         /// Using the feature vector List and the weightList to obtain the label of each anotation pair
         /// </summary>
@@ -35,7 +33,7 @@ namespace Senbazuru.HirarchicalExtraction
                 return;
             }
 
-            double label = 0.0 ;
+            double label = 0.0;
             for (int i = 0; i < nodepotentialfeaturevector.Count; i++)
             {
                 label = 0.0;
@@ -97,10 +95,10 @@ namespace Senbazuru.HirarchicalExtraction
 
             while (true)
             {
-                IList<double> WeightListOld = this.JoinWeightList() ;
+                IList<double> WeightListOld = this.JoinWeightList();
                 for (int k = 0; k < this.NUM_NODE_POTENTIAL_FEATURE_NUMBER; k++)
                 {
-                    Descend = NodePotentialDescend(nodepotentialfeaturevector,edgepotentialfeaturevector, k);
+                    Descend = NodePotentialDescend(nodepotentialfeaturevector, edgepotentialfeaturevector, k);
                     WeightListNodeFeature[k] += this.LAMBDA * Descend;
                 }
                 for (int k = 0; k < this.NUM_EDGE_POTENTIAL_FEATURE_NUMBER; k++)
@@ -117,7 +115,7 @@ namespace Senbazuru.HirarchicalExtraction
             }
             // Addjust feature, because weight of the feature need to have negative effect on the model, but this training process only considers the 
             //FeatureAdjust();
-            
+
         }
 
         private double NodePotentialDescend(IList<NodePotentialFeatureVector> nodepotentialfeaturevector, IList<EdgePotentialFeatureVector> edgepotentialfeaturevector, int k)
@@ -127,7 +125,7 @@ namespace Senbazuru.HirarchicalExtraction
             {
                 Descend += nodepotentialfeaturevector[i].features[k];
             }
-            return Descend - NormalizationTerm(nodepotentialfeaturevector, edgepotentialfeaturevector,k,3) - RegularizationParameter(1, k);
+            return Descend - NormalizationTerm(nodepotentialfeaturevector, edgepotentialfeaturevector, k, 3) - RegularizationParameter(1, k);
         }
 
         private double EdgePotentialDescend(IList<NodePotentialFeatureVector> nodepotentialfeaturevector, IList<EdgePotentialFeatureVector> edgepotentialfeaturevector, int k)
@@ -137,7 +135,7 @@ namespace Senbazuru.HirarchicalExtraction
             {
                 Descend += edgepotentialfeaturevector[i].features[k];
             }
-            return Descend - NormalizationTerm(nodepotentialfeaturevector, edgepotentialfeaturevector, k,3) - RegularizationParameter(2, k);
+            return Descend - NormalizationTerm(nodepotentialfeaturevector, edgepotentialfeaturevector, k, 3) - RegularizationParameter(2, k);
         }
 
         /// <summary>
@@ -151,11 +149,11 @@ namespace Senbazuru.HirarchicalExtraction
             // Initial weightList
             IList<double> WeightList = this.JoinWeightList();
 
-            double variance = this.Variance(WeightList) ;
+            double variance = this.Variance(WeightList);
 
             if (variance == 0) return 0.0;
 
-            switch(FeatureType)
+            switch (FeatureType)
             {
                 case 1:
                     return this.WeightListNodeFeature[k] / variance;
@@ -168,7 +166,7 @@ namespace Senbazuru.HirarchicalExtraction
 
         private double NormalizationTerm(IList<NodePotentialFeatureVector> nodepotentialfeaturevector, IList<EdgePotentialFeatureVector> edgepotentialfeaturevector, int k, int type)
         {
-            double sum = 0.0 ;
+            double sum = 0.0;
             for (int i = 0; i < nodepotentialfeaturevector.Count; i++)
             {
                 for (int j = 0; j < this.NUM_NODE_POTENTIAL_FEATURE_NUMBER; j++)
@@ -224,7 +222,7 @@ namespace Senbazuru.HirarchicalExtraction
         private double Error(IList<double> weightlistold)
         {
             double error = 0.0;
-            IList<double> WeightList = this.JoinWeightList() ;
+            IList<double> WeightList = this.JoinWeightList();
             for (int i = 0; i < WeightList.Count; i++)
             {
                 error += (weightlistold[i] - WeightList[i]) * (weightlistold[i] - WeightList[i]);
@@ -235,7 +233,7 @@ namespace Senbazuru.HirarchicalExtraction
 
         private void FeatureNorm()
         {
-            
+
             double sum = this.WeightListNodeFeature.Sum();
             if (sum != 0.0)
             {

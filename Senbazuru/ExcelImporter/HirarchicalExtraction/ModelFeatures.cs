@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Senbazuru.HirarchicalExtraction
 {
@@ -11,7 +9,7 @@ namespace Senbazuru.HirarchicalExtraction
     {
 
         // Construction Method of ModelFeatures
-        public ModelFeatures() {}
+        public ModelFeatures() { }
 
         /* Bellow are Unary Features */
 
@@ -43,7 +41,7 @@ namespace Senbazuru.HirarchicalExtraction
         public int FeatureContainTotal(IList<Range> celllist, int index)
         {
             string value = (string)celllist[index].get_Value();
-            return value.ToLower().Contains("total")? 1:0 ;
+            return value.ToLower().Contains("total") ? 1 : 0;
         }
 
         public int FeatureContainColon(IList<Range> celllist, int index)
@@ -54,7 +52,7 @@ namespace Senbazuru.HirarchicalExtraction
 
         public int FeatureCenterAligned(IList<Range> celllist, int index)
         {
-            return celllist[index].HorizontalAlignment == XlHAlign.xlHAlignCenter? 1: 0;
+            return celllist[index].HorizontalAlignment == XlHAlign.xlHAlignCenter ? 1 : 0;
         }
 
         public int FeatureNumeric(IList<Range> celllist, int index)
@@ -76,8 +74,9 @@ namespace Senbazuru.HirarchicalExtraction
         public int FeatureCapitalized(IList<Range> celllist, int index)
         {
             string value = (string)celllist[index].get_Value();
-            for (int i = 0; i < value.Count(); i++) {
-				char c = value[i];
+            for (int i = 0; i < value.Count(); i++)
+            {
+                char c = value[i];
                 if (!char.IsLower(c))
                 {
                     return 0;
@@ -117,8 +116,8 @@ namespace Senbazuru.HirarchicalExtraction
             }
             else
                 return 0;
-//            if (celllist[indexParent].Font.Size == System.DBNull.Value || celllist[indexChild].Font.Size == System.DBNull.Value) return 0;
-            
+            //            if (celllist[indexParent].Font.Size == System.DBNull.Value || celllist[indexChild].Font.Size == System.DBNull.Value) return 0;
+
         }
 
         //Has blank cells in the middle
@@ -135,7 +134,7 @@ namespace Senbazuru.HirarchicalExtraction
                     return 1;
                 }
             }
-            return 0 ;
+            return 0;
         }
 
         // Has middle cell with indentation between the pair’s
@@ -179,7 +178,7 @@ namespace Senbazuru.HirarchicalExtraction
         }
 
         // Has middle cell with indentation between the pair’s
-        
+
         public int BFeatureIndentationShorter(IList<Range> celllist, int indexParent, int indexChild)
         {
             int indexStart = indexParent < indexChild ? indexParent : indexChild;
@@ -241,10 +240,11 @@ namespace Senbazuru.HirarchicalExtraction
         /* These two features are different */
         public int BFeatureStyleAdjacent(IList<Range> celllist, int indexParent, int indexChild)
         {
+            //TODO needed
             Range cellParent = celllist[indexParent];
             Range cellChild = celllist[indexChild];
 
-            return 0;           
+            return 0;
 
         }
 
@@ -286,7 +286,8 @@ namespace Senbazuru.HirarchicalExtraction
 
         }
         //Parent cell in empty
-        public int BFeatureParentIsEmptyCell(IList<Range> celllist, int indexParent, int indexChild) {
+        public int BFeatureParentIsEmptyCell(IList<Range> celllist, int indexParent, int indexChild)
+        {
             string cellValue = (celllist[indexParent].Text as string);
             return cellValue.Length == 0 ? 1 : 0;
         }
@@ -296,6 +297,24 @@ namespace Senbazuru.HirarchicalExtraction
             string cellValue = (celllist[indexChild].Text as string);
             return cellValue.Length == 0 ? 1 : 0;
         }
+
+        //Different identation in the middle cell
+        public int BFeatureIndentationDifferent(IList<Range> celllist, int indexParent, int indexChild)
+        {
+            int indexStart = indexParent < indexChild ? indexParent : indexChild;
+            int indexEnd = indexParent > indexChild ? indexParent : indexChild;
+            for (int i = indexStart + 1; i < indexEnd; i++)
+            {
+                string parent = celllist[indexParent].Text;
+                string child = celllist[indexChild].Text;
+                string middle = celllist[i].Text;
+                if ((celllist[indexParent].IndentLevel < celllist[indexChild].IndentLevel) && (celllist[i].IndentLevel < celllist[indexChild].IndentLevel))
+                    return 1;
+
+            }
+            return 0;
+        }
+
         /*Below are auxiliary method*/
         private string getValueType(string cellValue)
         {
@@ -314,7 +333,7 @@ namespace Senbazuru.HirarchicalExtraction
 
         private int IndentManual(string value)
         {
-            int indent = 0 ;
+            int indent = 0;
             foreach (char c in value)
             {
                 if (c.Equals(' '))

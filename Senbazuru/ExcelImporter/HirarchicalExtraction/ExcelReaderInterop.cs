@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 using Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 
@@ -16,7 +11,7 @@ namespace Senbazuru.HirarchicalExtraction
         public ExcelReaderInterop()
         {
             excelapp = new Application();
- 
+
         }
 
         public void OpenExcel(string strFileName)
@@ -53,18 +48,18 @@ namespace Senbazuru.HirarchicalExtraction
             {
                 Worksheet sheet = (Worksheet)workBookIn.Sheets[sheetNum];
 
-                
+
                 //
                 // Take the used range of the sheet. Finally, get an object array of all
                 // of the cells in the sheet (their values). You can do things with those
                 // values. See notes about compatibility.
                 //
                 Range excelRange = sheet.UsedRange;
-                
+
                 valueArray = (object[,])excelRange.get_Value(
                     XlRangeValueDataType.xlRangeValueDefault);
-                
-                
+
+
                 //
                 // Do something with the data in the array with a custom method.
                 //
@@ -90,7 +85,7 @@ namespace Senbazuru.HirarchicalExtraction
 
         public object[,] GetCellsAsArray
         {
-            get{ return valueArray; }
+            get { return valueArray; }
         }
     }
 }

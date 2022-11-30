@@ -1,10 +1,7 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Office.Interop.Excel;
 
 namespace FrameFinder
 {
@@ -143,14 +140,14 @@ namespace FrameFinder
 
         public static List<Tuple<int, int, int, int>> Trim(Worksheet sheet, List<Tuple<int, int, int, int>> list)
         {
-            List<Tuple<int, int, int, int>> ret = new List<Tuple<int,int,int,int>>();
+            List<Tuple<int, int, int, int>> ret = new List<Tuple<int, int, int, int>>();
             foreach (Tuple<int, int, int, int> cellRange in list)
             {
                 int upRow = cellRange.Item1;
                 int leftCol = cellRange.Item2;
                 int downRow = cellRange.Item3;
                 int rightCol = cellRange.Item4;
-                
+
                 for (int i = upRow; i <= downRow; ++i)
                 {
                     bool isEmpty = true;

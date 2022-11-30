@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FrameFinder
 {
     class PredictSheetRow
     {
         public FeatureSheetRow feaRow;
+        public PredictSheetRow(string path)
+        {
+            Config.BASEDIR = path;
+            this.feaRow = new FeatureSheetRow();
+        }
         public PredictSheetRow()
         {
             this.feaRow = new FeatureSheetRow();

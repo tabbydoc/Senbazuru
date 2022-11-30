@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace FrameFinder
 {
@@ -15,7 +11,7 @@ namespace FrameFinder
             string predictPath = Config.CRFTMPPREDICT;
             string fileName = Path.GetFileName(predictPath);
             Console.WriteLine("Generating final output");
-            String outPath = Path.Combine(Config.OUTPUTDIR, workbookName+ "____" + sheetName + "____" + counter);
+            String outPath = Path.Combine(Config.OUTPUTDIR, workbookName + "____" + sheetName + "____" + counter);
             StreamReader fin = new StreamReader(predictPath);
             StreamWriter fout = new StreamWriter(outPath);
             String line;

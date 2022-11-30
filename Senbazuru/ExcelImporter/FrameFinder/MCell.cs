@@ -1,10 +1,6 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Office.Interop.Excel;
 
 namespace FrameFinder
 {
@@ -64,7 +60,7 @@ namespace FrameFinder
         {
             get { return this.rightBorder; }
         }
-        
+
         private int bgColor;
         private int height;
         private int italicFlag;
@@ -96,7 +92,7 @@ namespace FrameFinder
         {
             get { return this.indents; }
         }
-        
+
         public MCell() { }
         public void Init(string value, string cType, int indents, int alignStyle,
             int boldFlag, string borderStyle, int bgColor, int height,

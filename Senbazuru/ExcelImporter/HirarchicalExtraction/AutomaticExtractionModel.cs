@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Senbazuru.HirarchicalExtraction
 {
@@ -11,7 +7,7 @@ namespace Senbazuru.HirarchicalExtraction
     {
         private Model model = new Model();
 
-        AttributeTree tree = new AttributeTree() ;
+        AttributeTree tree = new AttributeTree();
 
         public AutomaticExtractionModel() { }
 
@@ -24,10 +20,10 @@ namespace Senbazuru.HirarchicalExtraction
         /// <param name="AnotationPairEdgeList"></param>
         public void Training(IList<AnotationPair> AnotationPairList, IList<AnotationPairEdge> AnotationPairEdgeList)
         {
-            IList<NodePotentialFeatureVector> nodepotentialfeaturevector = new List<NodePotentialFeatureVector> ();
-            IList<EdgePotentialFeatureVector> edgepotentialfeaturevector = new List<EdgePotentialFeatureVector> ();
+            IList<NodePotentialFeatureVector> nodepotentialfeaturevector = new List<NodePotentialFeatureVector>();
+            IList<EdgePotentialFeatureVector> edgepotentialfeaturevector = new List<EdgePotentialFeatureVector>();
 
-            for (int i=0 ;i<AnotationPairList.Count;i++)
+            for (int i = 0; i < AnotationPairList.Count; i++)
             {
                 // only extract true parent-child as the label information
                 if (AnotationPairList[i].nodepotentialfeaturevector.label == true)
@@ -91,7 +87,8 @@ namespace Senbazuru.HirarchicalExtraction
 
 
         /*Save and Load Model from Model file*/
-        public void SaveModel(string modelFile) {
+        public void SaveModel(string modelFile)
+        {
             this.MODEL_FILE = modelFile;
             SaveModel();
         }

@@ -1,17 +1,17 @@
 ﻿using Microsoft.Office.Interop.Excel;
-using Senbazuru.HirarchicalExtraction;
+//using Senbazuru.HirarchicalExtraction;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 
 namespace Senbazuru.HirarchicalExtraction
 {
     public class HirarchicalModel
     {
-        static string Filename = Path.GetFullPath("../../../resources/HirarchicalExtraction/TrainingData");
+        static string FileName = Path.GetFullPath("../../../resources/HirarchicalExtraction/TrainingData");
         Application excelapp = new Application();
 
         // We obtain the 1-th sheet
@@ -32,7 +32,7 @@ namespace Senbazuru.HirarchicalExtraction
 
         private double TRAININGSIZE = 0.75;
 
-        public HirarchicalModel(){}
+        public HirarchicalModel() { }
 
         private AutomaticExtractionModel model = new AutomaticExtractionModel();
 
@@ -42,7 +42,7 @@ namespace Senbazuru.HirarchicalExtraction
         /// <param name="isTest">File loading</param>
         public void HirarchicalModelFileLoading(bool isTest)
         {
-            System.IO.DirectoryInfo Dir = new System.IO.DirectoryInfo(Filename);
+            System.IO.DirectoryInfo Dir = new System.IO.DirectoryInfo(FileName);
 
             FileInfo[] files = Dir.GetFiles(REGULAREXPRESSION_FILE);
             FileInfo[] labels = Dir.GetFiles(REGULAREXPRESSION_LABEL);
@@ -57,7 +57,7 @@ namespace Senbazuru.HirarchicalExtraction
                 FileInfo file = files[i];
                 FileInfo label = labels[i];
 
-                this.anotationPairTrainingList.AddRange(LabelReading(file.FullName, label.FullName,true,false));
+                this.anotationPairTrainingList.AddRange(LabelReading(file.FullName, label.FullName, true, false));
                 Console.WriteLine("Training File " + i + "Loaded");
             }
 
@@ -69,8 +69,8 @@ namespace Senbazuru.HirarchicalExtraction
                 FileInfo file = files[i];
                 FileInfo label = labels[i];
 
-                this.anotationPairGroundTruthList = LabelReading(file.FullName, label.FullName,true,false);
-                this.anotationPairTestingList = LabelReading(file.FullName, label.FullName,false,true);
+                this.anotationPairGroundTruthList = LabelReading(file.FullName, label.FullName, true, false);
+                this.anotationPairTestingList = LabelReading(file.FullName, label.FullName, false, true);
                 Console.WriteLine("Testing File " + i + "Loaded");
             }
         }
@@ -88,11 +88,11 @@ namespace Senbazuru.HirarchicalExtraction
         public void Evaluation()
         {
             double accuracy = 0.0;
-            
+
             for (int i = 0; i < anotationPairTestingList.Count; i++)
             {
                 int index = this.Indexof(anotationPairGroundTruthList, anotationPairTestingList[i]);
-                if ( index != -1)
+                if (index != -1)
                 {
                     if (anotationPairTestingList[i].nodepotentialfeaturevector.label == anotationPairGroundTruthList[index].nodepotentialfeaturevector.label)
                     {
@@ -123,7 +123,9 @@ namespace Senbazuru.HirarchicalExtraction
         /// false: select the labeled pairs in the area.
         /// </param>
         /// <returns></returns>
-        private List<AnotationPair> LabelReading (string file, string label, bool addLabel, bool randomSample)
+
+        //this.anotationPairTestingList = LabelReading(file.FullName, label.FullName,false,true);
+        private List<AnotationPair> LabelReading(string file, string label, bool addLabel, bool randomSample)
         {
             Workbook workbook = excelapp.Workbooks.Open(file);
             Worksheet sheet = workbook.Sheets[SHEETNUM];
@@ -135,8 +137,8 @@ namespace Senbazuru.HirarchicalExtraction
             Range endCell = sheet.Cells[int.Parse(value.Split(' ')[3]), int.Parse(value.Split(' ')[4])];
             Range range = sheet.get_Range(startCell.get_Address() + ":" + endCell.get_Address());
 
-            List<Tuple<int,int>> indexPairList = new List<Tuple<int,int>>() ;
-            value = labelReader.ReadLine() ;
+            List<Tuple<int, int>> indexPairList = new List<Tuple<int, int>>();
+            value = labelReader.ReadLine();
             while (value != null)
             {
                 Tuple<int, int> indexPair = new Tuple<int, int>(int.Parse(value.Split(',')[0]) - startIdx, int.Parse(value.Split(',')[1]) - startIdx);
@@ -144,7 +146,7 @@ namespace Senbazuru.HirarchicalExtraction
                 value = labelReader.ReadLine();
             }
 
-            
+
             FeatureConstructer constructer;
             if (!randomSample)
             {
@@ -154,7 +156,7 @@ namespace Senbazuru.HirarchicalExtraction
             {
                 constructer = new FeatureConstructer(sheet, range);
             }
-            List<AnotationPair> anotationPairList = constructer.anotationPairList ;
+            List<AnotationPair> anotationPairList = constructer.anotationPairList;
 
             if (addLabel && !randomSample)
             {
@@ -172,7 +174,7 @@ namespace Senbazuru.HirarchicalExtraction
             return this.model;
         }
 
-        public void SaveModel ()
+        public void SaveModel()
         {
             this.model.SaveModel();
         }
@@ -192,7 +194,7 @@ namespace Senbazuru.HirarchicalExtraction
         /// <returns></returns>
         private int Indexof(List<AnotationPair> list, AnotationPair pair)
         {
-            for (int i = 0; i < list.Count; i++ )
+            for (int i = 0; i < list.Count; i++)
             {
                 if (list[i].indexChild == pair.indexChild && list[i].indexParent == pair.indexParent)
                 {

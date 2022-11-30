@@ -1,9 +1,5 @@
 ﻿using Microsoft.Office.Interop.Excel;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Senbazuru.HirarchicalExtraction
 {
@@ -15,8 +11,8 @@ namespace Senbazuru.HirarchicalExtraction
 
         // Feature Vector denotes the list of feature values.
         public NodePotentialFeatureVector nodepotentialfeaturevector = null;
-        //Feature Vaector of the first Children (if applicable)
-        private NodePotentialFeatureVector nodepotentialfeaturevectorOfFirstChild = null;
+        //Feature Vaector of the first hierarhy candidate
+        private NodePotentialFeatureVector nodeFeatureAdjacentVector = null;
 
         public AnotationPair(IList<Range> CellList, int indexParent, int indexChild)
         {
@@ -25,7 +21,7 @@ namespace Senbazuru.HirarchicalExtraction
             this.indexChild = indexChild;
         }
 
-        public static bool operator == (AnotationPair pair1, AnotationPair pair2)
+        public static bool operator ==(AnotationPair pair1, AnotationPair pair2)
         {
             return pair1.indexChild == pair2.indexChild && pair1.indexParent == pair2.indexParent ? true : false;
         }
@@ -36,13 +32,21 @@ namespace Senbazuru.HirarchicalExtraction
         }
 
         //FeaturevectorOfFirstChild is needed for comparison with 
-        public NodePotentialFeatureVector FeaturevectorOfFirstChild {
-            get {
-                return this.nodepotentialfeaturevectorOfFirstChild;
+        public bool FeaturevectorOfFirstChildNull()
+        {
+            if (this.nodeFeatureAdjacentVector is null) return true;
+            else return false;
+        }
+        public NodePotentialFeatureVector featureAdjacentVector
+        {
+            get
+            {
+                return this.nodeFeatureAdjacentVector;
             }
-            set {
-                this.nodepotentialfeaturevectorOfFirstChild = value; 
-            } 
+            set
+            {
+                this.nodeFeatureAdjacentVector = value;
+            }
         }
 
     }

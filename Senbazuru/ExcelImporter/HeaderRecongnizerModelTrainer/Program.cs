@@ -1,9 +1,5 @@
 ﻿using Senbazuru.HirarchicalExtraction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace HeaderRecongnizerModelTrainer
 {
@@ -16,7 +12,8 @@ namespace HeaderRecongnizerModelTrainer
 
             model.LoadModel();
 
-            model.HirarchicalModelFileLoading(true);
+            model.HirarchicalModelFileLoading(false);
+
 
             //model.Train();
 

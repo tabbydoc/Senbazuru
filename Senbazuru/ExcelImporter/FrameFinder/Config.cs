@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace FrameFinder
@@ -22,11 +18,11 @@ namespace FrameFinder
 
         // files to store intermediate results
         public static String CRFTEMPDIR = Path.Combine(dat, "tmp");
-        public static String CRFTMPFEATURE = Path.Combine(CRFTEMPDIR,"feature.tmp");
+        public static String CRFTMPFEATURE = Path.Combine(CRFTEMPDIR, "feature.tmp");
         public static String CRFTMPPREDICT = Path.Combine(CRFTEMPDIR, "predict.tmp");
 
         // template file for CRF++ to parse the provided features
-        public static String CRFPPTEMPLATEPATH = Path.Combine(dat,"template");
+        public static String CRFPPTEMPLATEPATH = Path.Combine(dat, "template");
         // training data
         public static String CRFTRAINDATAPATH = Path.Combine(dat, "saus_train.data");
 

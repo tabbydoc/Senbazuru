@@ -1,9 +1,6 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Senbazuru.HirarchicalExtraction
 {
@@ -24,7 +21,7 @@ namespace Senbazuru.HirarchicalExtraction
         /// <param name="AttributePairList"></param>
         public void AttributeRelationDictionary(IList<AnotationPair> AttributePairList)
         {
-            this.CellList = AttributePairList[0].CellList ;
+            this.CellList = AttributePairList[0].CellList;
             for (int i = 0; i < AttributePairList.Count; i++)
             {
                 if (AttributePairList[i].nodepotentialfeaturevector.label == true)
@@ -48,7 +45,7 @@ namespace Senbazuru.HirarchicalExtraction
 
         public void Repair(IList<AnotationPair> AttributePairList, IList<AnotationPairEdge> AttributePairEdgeList, int OldParentRowNum, int TargetRowNum, int NewParentRowNum)
         {
-            int index = this.RepairSinglePair(AttributePairList,OldParentRowNum,TargetRowNum,NewParentRowNum) ;
+            int index = this.RepairSinglePair(AttributePairList, OldParentRowNum, TargetRowNum, NewParentRowNum);
 
             for (int i = 0; i < AttributePairEdgeList.Count; i++)
             {

@@ -1,9 +1,7 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Senbazuru.HirarchicalExtraction
 {
@@ -12,7 +10,7 @@ namespace Senbazuru.HirarchicalExtraction
         public List<AnotationPair> anotationPairList;
         public List<AnotationPairEdge> anotationPairEdgeList;
 
-        private Worksheet sheet = null ;
+        private Worksheet sheet = null;
         private List<Range> celllist;
 
         private int RANDOMSAMPLECOUNT = 3;
@@ -71,7 +69,7 @@ namespace Senbazuru.HirarchicalExtraction
             this.celllist = new List<Range>();
 
             int rowcount = AttributeRange.Rows.Count;
-            int colnum = AttributeRange.Column ;
+            int colnum = AttributeRange.Column;
 
             for (int i = 1; i <= rowcount; i++)
             {
@@ -103,7 +101,7 @@ namespace Senbazuru.HirarchicalExtraction
                     {
                         Random rand = new Random();
                         int index = rand.Next(celllist.Count - i);
-                        AnotationPair pair = new AnotationPair(celllist, i, i+ index);
+                        AnotationPair pair = new AnotationPair(celllist, i, i + index);
                         anotationPairList.Add(pair);
                     }
                 }
@@ -141,7 +139,7 @@ namespace Senbazuru.HirarchicalExtraction
                         Random rand = new Random();
                         int index = rand.Next(anotationPairList.Count);
                         AnotationPairEdge PairEdge = new AnotationPairEdge(anotationPairList[i], anotationPairList[index]);
-                        anotationPairEdgeList.Add(PairEdge);                       
+                        anotationPairEdgeList.Add(PairEdge);
                     }
                 }
             }
@@ -172,25 +170,19 @@ namespace Senbazuru.HirarchicalExtraction
                 featureVector.Add(Features.BFeatureBackgroundDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
                 featureVector.Add(Features.BFeatureParentIsEmptyCell(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
                 featureVector.Add(Features.BFeatureChildIsEmptyCell(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
+                featureVector.Add(Features.BFeatureIndentationDifferent(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
+
                 NodePotentialFeatureVector nodepotentialfeaturevector = new NodePotentialFeatureVector(featureVector);
                 anotationPairList[i].nodepotentialfeaturevector = nodepotentialfeaturevector;
-                //Check adjacent pair for child vector features
-                IList<int> npfv = nodepotentialfeaturevector.getFeatures();
-                if ((npfv[2] == 1 //Atribute parent's identation greater that Child
-                            || npfv[4] == 1 //Child’s font size is smaller than parent’s
-                            || npfv[11] == 1 //One cell has BOLD font and one not
-                            || npfv[12] == 1 //One cell has ITALIC font and one not
-                            || npfv[13] == 1 //One cell has UNDERLINE font and one not
-                            || npfv[14] == 1 //Pair cells have different background)
-                    )
-                    && (npfv[0] == 1) //Pair with adjacent indexes
-                    && (npfv[15] == 0) //Parent is not empty
-                    && (npfv[16] == 0)
-                    )
-                    anotationPairList[i].FeaturevectorOfFirstChild = nodepotentialfeaturevector;
-                //anotationPairList[i].
+
+                if ((i > 0) && (anotationPairList[i].indexParent == anotationPairList[i - 1].indexParent) &&
+                    (anotationPairList[i].nodepotentialfeaturevector.features == anotationPairList[i - 1].nodepotentialfeaturevector.features)) {
+                    anotationPairList[i].featureAdjacentVector = anotationPairList[i - 1].featureAdjacentVector;
+                }
             }
         }
+
+
 
         private void EdgeFeatureVectorConstruction()
         {

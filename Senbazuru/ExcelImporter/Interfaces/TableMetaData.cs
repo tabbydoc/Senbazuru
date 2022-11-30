@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.In4.ExcelImporter.Core
 {
@@ -57,7 +54,7 @@ namespace Microsoft.In4.ExcelImporter.Core
         HourAndMinute,
         HourMinuteAndSecond,
         FullTime
-    } 
+    }
 
     public class DateTimeMetaData
     {

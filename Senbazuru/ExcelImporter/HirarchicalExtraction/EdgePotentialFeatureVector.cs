@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Senbazuru.HirarchicalExtraction
 {
@@ -17,7 +13,7 @@ namespace Senbazuru.HirarchicalExtraction
 
         public EdgePotentialFeatureVector(IList<int> features, int pair1, int pair2)
         {
-            this.features = features ;
+            this.features = features;
             this.pair1Idx = pair1;
             this.pair2Idx = pair2;
         }
