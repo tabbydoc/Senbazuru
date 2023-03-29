@@ -60,14 +60,16 @@ namespace Senbazuru.HirarchicalExtraction
         public bool similarityOfVectors(IList<int> npv) {
             if ((npv != null) && (features.Count == npv.Count)
                 && (features[2] == npv[2]) //Similar identation type
+                && (features[3] == npv[3]) //ChildindexGreater
                 && (features[4] == npv[4]) //Similar child font size smaler
+                && (features[8] == npv[8]) //Similar Identation shoter
                 && (features[11] == npv[11]) //Similar font bold
                 && (features[12] == npv[12]) //Similar italic
                 && (features[13] == npv[13]) //Similar underline
                 && (features[14] == npv[14]) //Similar backgorund
+                && (features[17] == npv[17]) //Similar identation
+                && (features[18] == npv[18]) //Similar horisontal aligment
                 )
-                return true;
-            
             {
 
                 return true;
@@ -75,6 +77,14 @@ namespace Senbazuru.HirarchicalExtraction
 
 
             return false;
+        }
+        public bool equialityOfCellsData() {
+            int cnt = features.Count;
+            for (int i = 1; i < cnt; i++) { 
+             if (((i != 3) && (features[i] != 0)) || ((i == 3) && (features[i] != 1 ))) return false;
+            }
+
+            return true;
         }
 
 

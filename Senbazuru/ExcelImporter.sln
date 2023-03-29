@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "ExcelImporter\Interfaces\Interfaces.csproj", "{81CD5F79-E096-45EF-989D-9BB08BB65F33}"
 EndProject
@@ -20,32 +20,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrameFinderConsole", "ExcelImporter\FrameFinderConsole\FrameFinderConsole.csproj", "{856CD5B8-F7EE-4E1B-97B6-3714BDF4D8B5}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://vstfsng01:8080/tfs/msrasa_projects
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = ExcelImporter\\Interfaces\\Interfaces.csproj
-		SccProjectTopLevelParentUniqueName1 = ExcelImporter.sln
-		SccProjectName1 = ExcelImporter/Interfaces
-		SccLocalPath1 = ExcelImporter\\Interfaces
-		SccProjectUniqueName2 = ExcelImporter\\FrameFinder\\FrameFinder.csproj
-		SccProjectTopLevelParentUniqueName2 = ExcelImporter.sln
-		SccProjectName2 = ExcelImporter/FrameFinder
-		SccLocalPath2 = ExcelImporter\\FrameFinder
-		SccProjectUniqueName3 = ExcelImporter\\HirarchicalExtraction\\HirarchicalExtraction.csproj
-		SccProjectTopLevelParentUniqueName3 = ExcelImporter.sln
-		SccProjectName3 = ExcelImporter/HirarchicalExtraction
-		SccLocalPath3 = ExcelImporter\\HirarchicalExtraction
-		SccProjectUniqueName4 = ExcelImporter\\HeaderRecongnizerModelTrainer\\HeaderRecongnizerModelTrainer.csproj
-		SccProjectTopLevelParentUniqueName4 = ExcelImporter.sln
-		SccProjectName4 = ExcelImporter/HeaderRecongnizerModelTrainer
-		SccLocalPath4 = ExcelImporter\\HeaderRecongnizerModelTrainer
-		SccProjectUniqueName5 = ExcelImporter\\FrameFinderConsole\\FrameFinderConsole.csproj
-		SccProjectTopLevelParentUniqueName5 = ExcelImporter.sln
-		SccProjectName5 = ExcelImporter/FrameFinderConsole
-		SccLocalPath5 = ExcelImporter\\FrameFinderConsole
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -81,5 +55,8 @@ Global
 		{A67A276D-A379-4069-AF50-56EC121523CC} = {208E3C1F-DC24-4F6C-8E1F-DBB8E56F4E34}
 		{348C860E-81A2-4690-8517-DE00CDD5EC62} = {2031DF9F-C108-4757-A4E7-F812BC0DA5E4}
 		{856CD5B8-F7EE-4E1B-97B6-3714BDF4D8B5} = {2031DF9F-C108-4757-A4E7-F812BC0DA5E4}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9814B791-E915-48A8-B6EB-47A932033D40}
 	EndGlobalSection
 EndGlobal

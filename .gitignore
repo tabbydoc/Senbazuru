@@ -26,7 +26,8 @@ $RECYCLE.BIN/
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -40,13 +41,21 @@ Icon
 .AppleDesktop
 Network Trash Folder
 Temporary Items
+bin
+debug
 .apdisk
 
 #Prediction results
-/Senbazuru/ExcelImporter/resources/FrameFinder/data/results/*
+/Senbazuru/ExcelImporter/resources/FrameFinder/data/results/
 /Senbazuru/ExcelImporter/Senbazuru/bin/
 /Senbazuru/ExcelImporter/Interfaces/bin/
 /Senbazuru/ExcelImporter/HirarchicalExtraction/bin
 /Senbazuru/ExcelImporter/HeaderRecongnizerModelTrainer/bin
 /Senbazuru/ExcelImporter/FrameFinderConsole/bin
 /Senbazuru/ExcelImporter/FrameFinder/bin
+/Senbazuru/ExcelImporter/FrameFinder/obj/Debug
+/Senbazuru/ExcelImporter/FrameFinderConsole/obj/Debug
+/Senbazuru/ExcelImporter/Interfaces/obj/Debug
+*.exe
+*.cache
+*.pdb

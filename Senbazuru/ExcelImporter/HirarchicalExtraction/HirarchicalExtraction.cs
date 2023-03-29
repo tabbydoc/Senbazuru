@@ -11,6 +11,7 @@ namespace Senbazuru.HirarchicalExtraction
         private static String BASE_DIR = Path.GetFullPath("../../../resources/FrameFinder/data/");
         public static String EXCEL_FILES_DIR = Path.Combine(BASE_DIR, "sheets");
         private static String FF_RESULTS_DIR = Path.Combine(BASE_DIR, "results");
+        public static string PAIRS_DIR = Path.Combine(BASE_DIR, "pairs");
 
         private static String REGULAREXPRESSION_FILE = "*.xls*";
         private string startCell;
@@ -30,25 +31,29 @@ namespace Senbazuru.HirarchicalExtraction
             String ffFile;
             FeatureConstructer constructer;
             Dictionary<string, string> par = Utils.NamedParams(args);
-
+            List<string> parList;  
 
 
             var ffData = new Dictionary<string, Range>();
 
-            int tblNum = 0; //0 value for test only - The one table on the sheet
+            int tblNum = -1; //-1 value for test only - The one table on the sheet
 
             AutomaticExtractionModel model = new AutomaticExtractionModel();
             model.LoadModel();
             DirectoryInfo Dir = new DirectoryInfo(EXCEL_FILES_DIR);
             FileInfo[] files = Dir.GetFiles(REGULAREXPRESSION_FILE);
-
+            int cntr = 0;
             foreach (FileInfo file in files)
             {
                 //excelReader = new ExcelReaderInterop();
                 //excelReader.OpenExcel(file.FullName);
                 workbook = excelapp.Workbooks.Open(file.FullName);
                 sheet = workbook.Sheets[SHEETNUM];
-                ffFile = Path.Combine(FF_RESULTS_DIR, file.Name + "____" + sheet.Name + "____" + tblNum);
+                Debug.WriteLine(sheet.Name + " processing");
+                if (tblNum == -1)
+                    ffFile = Path.Combine(FF_RESULTS_DIR, file.Name + "____" + sheet.Name);
+                else
+                    ffFile = Path.Combine(FF_RESULTS_DIR, file.Name + "____" + sheet.Name + "____" + tblNum);
                 ffData = GetFFData(ffFile, sheet);
                 if (ffData == null)
                 {
@@ -59,17 +64,29 @@ namespace Senbazuru.HirarchicalExtraction
 
                 constructer = new FeatureConstructer(sheet, ffData["range"], true);
                 List<AnotationPair> anotationPairList = constructer.anotationPairList;
+                parList = new List<string>();
                 if (par["alg"] == "1")
                 {
                     //Algorithm 1: Classification
+                    int startPoint = 0;
                     for (int i = 0; i < anotationPairList.Count; i++)
                     {
-                        /*
-                        if ((anotationPairList[i].indexParent == 11) && (anotationPairList[i].indexChild == 15)) {
-                            Debug.WriteLine("alarm!");
-                        }*/
+                        if ((startPoint > anotationPairList[i].indexParent) || (startPoint >= anotationPairList[i].indexChild))
+                            continue;
+                        
+                        if ((anotationPairList[i].indexParent == 1) && (anotationPairList[i].indexChild == 2)) {
+                           Debug.WriteLine("alarm!");
+                        }
+                        
+                        
 
+                        /*
+                        if ((anotationPairList[i].indexParent == 2) && ((anotationPairList[i].indexChild == 25) || (anotationPairList[i].indexChild == 26)))
+                            Debug.WriteLine(anotationPairList[i].nodepotentialfeaturevector.FeatureVectorInString());
+                        */
+                        
                         IList<int> npv = anotationPairList[i].nodepotentialfeaturevector.getFeatures();
+                        if ((npv[15] == 1) || (npv[16] == 1)) continue;
                         if (
                             (npv[2] == 1 //Atribute parent's identation greater that Child
                             || npv[4] == 1 //Child’s font size is smaller than parent’s
@@ -77,56 +94,93 @@ namespace Senbazuru.HirarchicalExtraction
                             || npv[12] == 1 //One cell has ITALIC font and one not
                             || npv[13] == 1 //One cell has UNDERLINE font and one not
                             || npv[14] == 1 //Pair cells have different background
-                            ) 
-                            &&  (npv[15] == 0) //Parent is not empty
+                            || npv[17] == 1 //Pair cells have different identation
+                            || npv[18] == 1 //Pair cells have different horisontal aligment
+                            || npv[19] == 1 //Pair cells have different vertical aligment
+                            || npv[20] == 1 //Pair cells have different datatypes
+                            || (npv[5] == 4) //Parent has ":"
+                            )
+                            //&& ((npv[5] == 0) || (npv[5] == 4))
+                            && ((npv[5] != 2))
+                            && (npv[15] == 0) //Parent is not empty
                             && (npv[16] == 0) //Child is not empty
                             )
-                            // Main features, highlited differences in Parent-Child pair
+                        // Main features, highlited differences in Parent-Child pair
                         {
+                            //if ((npv[0] == 1) ||((npv[0] == 0) && (npv[1] == 1))) //Adjacent cells
                             if (npv[0] == 1) //Adjacent cells
-                            {
+                                {
                                 //Potentionally this is a pair
                                 anotationPairList[i].nodepotentialfeaturevector.label = true;
                             }
-                            else if ((npv[1] == 0) //There are no middle empty cell
-                                    && (npv[3] == 1) //Child’s row index is greater than parent’s
-                                    && (npv[5] == 0) //Has not middle cell containing keywords like "total" or ":" semicolon
-                                    && (npv[7] == 0) //There isn't middle cell with indentation between the pair’s
-                                    && (npv[17] == 0)
+                            else if (
+                                    //In our model we do not pay attention on empty cell, just pass them    
+                                    //(npv[1] !=2) //There are no middle empty cell
+                                    (npv[3] == 1) //Child’s row index is greater than parent’s
+                                    //&& (npv[5] != 1) //Has not middle cell containing keywords like "total" or ":" semicolon
+                                                     //&& (npv[7] == 0) //There isn't middle cell with indentation between the pair’s
+                                    && (
+                                        (npv[2] == 1)
+                                        || npv[4] == 1 //Child’s font size is smaller than parent’s
+                                        || npv[11] == 1 //One cell has BOLD font and one not
+                                        || npv[12] == 1 //One cell has ITALIC font and one not
+                                        || npv[13] == 1 //One cell has UNDERLINE font and one not
+                                        || npv[14] == 1 //Pair cells have different background
+                                        || (npv[17] == 1)
+                                        || (npv[18] == 1)
+                                        || (npv[19] == 1)
+                                        || ((npv[20] == 1) || (npv[20] == 2)) //Different or mixed data type of cells
+                                        || (npv[5] == 4) //Parent has ":"
+                                        )
                                     )
                             {
                                 //Compare with adjacent pair
-                                for (int j = i-1; j >= 0; j--) {
+                                for (int j = i - 1; j >= 0; j--)
+                                {
                                     //Review pair with this parent only
                                     if (anotationPairList[j].indexParent == anotationPairList[i].indexParent)
                                     {
-                                        if (anotationPairList[j].nodepotentialfeaturevector.label == true)
+                                        IList<int> npvj = anotationPairList[j].nodepotentialfeaturevector.getFeatures();
+                                       
+                                        if (npvj[16] != 1)
                                         {
-                                            IList<int> npvAdjacent = anotationPairList[j].nodepotentialfeaturevector.getFeatures();
-                                            if (anotationPairList[i].nodepotentialfeaturevector.similarityOfVectors(npvAdjacent) == true)
+                                            if (anotationPairList[j].nodepotentialfeaturevector.label == true)
                                             {
-                                                anotationPairList[i].nodepotentialfeaturevector.label = true;
-                                                break; //The first candidate pair is needed
+                                                if (anotationPairList[i].nodepotentialfeaturevector.similarityOfVectors(npvj) == true)
+                                                {
+                                                    anotationPairList[i].nodepotentialfeaturevector.label = true;
+                                                    break; //The first candidate pair is needed
+                                                }
                                             }
+                                            else if (anotationPairList[i].nodepotentialfeaturevector.similarityOfVectors(npvj) == true)
+                                                break;
                                         }
-                                        //else break;
                                     }
                                     else break;
                                 }
                             }
-                            
-                            
-                            
+
+
+
+                        }
+                        else {
+                            //Pair doesn't has any features. If previous pair is labeled start new hierarhy from this level
+                            if ((i > 0) && (anotationPairList[i].nodepotentialfeaturevector.equialityOfCellsData()))
+                            {
+                                startPoint = anotationPairList[i].indexChild;
+                            }
                         }
                         //Debug information
                         //if ((anotationPairList[i].indexParent == 10) && (anotationPairList[i].nodepotentialfeaturevector.label))
                         //if ((anotationPairList[i].indexParent == 10) && (anotationPairList[i].indexChild == 11 || anotationPairList[i].indexChild == 14|| anotationPairList[i].indexChild == 17))
                         if (anotationPairList[i].nodepotentialfeaturevector.label)
                         {
+                            string s = anotationPairList[i].indexParent + " " + anotationPairList[i].indexChild;
+                            parList.Add(s);
                             //if (anotationPairList[i].nodepotentialfeaturevector.label == true) { 
-                            Debug.Write("Parent: " + anotationPairList[i].indexParent + " Child: " + anotationPairList[i].indexChild);
-                            Debug.Write(" - ");
-                            Debug.WriteLine(anotationPairList[i].nodepotentialfeaturevector.FeatureVectorInString() + " " + anotationPairList[i].nodepotentialfeaturevector.label);
+                            //Debug.Write("Parent: " + anotationPairList[i].indexParent + " Child: " + anotationPairList[i].indexChild);
+                            //Debug.Write(" - ");
+                            //Debug.WriteLine(anotationPairList[i].nodepotentialfeaturevector.FeatureVectorInString() + " " + anotationPairList[i].nodepotentialfeaturevector.label);
 
                         }
                     }
@@ -160,7 +214,13 @@ namespace Senbazuru.HirarchicalExtraction
 
 
 
+                if (parList.Count > 0)
+                    savePairs2File(parList, sheet.Name + "xls__" + sheet.Name);
                 workbook.Close();
+                //Save results
+
+                cntr++;
+                //if (cntr >3) break;
             }
         }
 
@@ -207,6 +267,15 @@ namespace Senbazuru.HirarchicalExtraction
 
             }
             return result;
+
+        }
+
+        static void savePairs2File(List<string> pairs, string fileName, string path="") {
+            if (path.Equals(""))
+                path = PAIRS_DIR;
+            System.IO.File.WriteAllLines(path+"/"+fileName, pairs);
+
+
 
         }
 

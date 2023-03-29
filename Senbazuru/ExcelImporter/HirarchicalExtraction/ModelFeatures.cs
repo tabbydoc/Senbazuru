@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 
 namespace Senbazuru.HirarchicalExtraction
 {
@@ -88,7 +89,19 @@ namespace Senbazuru.HirarchicalExtraction
         /* Below are Binary Features */
         public int BFeatureAdjacent(IList<Range> celllist, int indexParent, int indexChild)
         {
-            return Math.Abs(indexChild - indexParent) == 1 ? 1 : 0;
+            if (Math.Abs(indexChild - indexParent) == 1)
+                return 1;
+            else {
+                int indexStart = indexParent < indexChild ? indexParent : indexChild;
+                int indexEnd = indexParent > indexChild ? indexParent : indexChild;
+                for (int i = indexStart + 1; i < indexEnd; i++) { 
+                    String value = (celllist[i].Text).Trim();
+                    if (value.Length != 0)
+                        return 0;
+                }
+            }
+            return 1;
+            
         }
 
         // Child’s indentation is greater than parent’s
@@ -96,6 +109,8 @@ namespace Senbazuru.HirarchicalExtraction
         {
             string parent = celllist[indexParent].Text;
             string child = celllist[indexChild].Text;
+            parent = parent.TrimEnd();
+            child = child.TrimEnd();
             if (this.IndentManual(child) > this.IndentManual(parent)) return 1;
             else
                 return celllist[indexParent].IndentLevel < celllist[indexChild].IndentLevel ? 1 : 0;
@@ -125,16 +140,22 @@ namespace Senbazuru.HirarchicalExtraction
         {
             int indexStart = indexParent < indexChild ? indexParent : indexChild;
             int indexEnd = indexParent > indexChild ? indexParent : indexChild;
-
+            int dist = indexEnd - indexStart-1;
+            int counter = 0;
             for (int i = indexStart + 1; i < indexEnd; i++)
             {
                 string cellValue = (celllist[i].Text as string);
                 if (cellValue.Length == 0)
                 {
-                    return 1;
+                    counter++;
                 }
             }
-            return 0;
+            if (counter == 0)
+                return 0;
+            else if (counter == dist)
+                return 1;
+            else
+                return 2;
         }
 
         // Has middle cell with indentation between the pair’s
@@ -142,6 +163,7 @@ namespace Senbazuru.HirarchicalExtraction
         {
             int indexStart = indexParent < indexChild ? indexParent : indexChild;
             int indexEnd = indexParent > indexChild ? indexParent : indexChild;
+            //Temporary commented, due to 17 featuer
             for (int i = indexStart + 1; i < indexEnd; i++)
             {
                 string parent = celllist[indexParent].Text;
@@ -168,6 +190,9 @@ namespace Senbazuru.HirarchicalExtraction
                 string parent = celllist[indexParent].Text;
                 string child = celllist[indexChild].Text;
                 string middle = celllist[i].Text;
+                parent = parent.TrimEnd();
+                child = child.TrimEnd();    
+                middle = middle.TrimEnd(); 
                 if (this.IndentManual(middle) > this.IndentManual(parent) && this.IndentManual(middle) > this.IndentManual(child)) return 1;
                 else if (celllist[i].IndentLevel > celllist[indexParent].IndentLevel && celllist[i].IndentLevel > celllist[indexChild].IndentLevel)
                 {
@@ -200,16 +225,30 @@ namespace Senbazuru.HirarchicalExtraction
         // Has middle cell containing “:” or “total”
         public int BFeatureContainColonAndTotal(IList<Range> celllist, int indexParent, int indexChild)
         {
+            bool isContainsStopWord(String value) { 
+                value = value.Trim();
+                if (value.ToLower().Equals("total") || value.Trim().ToLower().Equals("sum")
+                    || value.ToLower().Equals("united states") || value.Trim().ToLower().Equals("us"))
+                    return true;
+                else
+                    return false;
+            }
+
             int indexStart = indexParent < indexChild ? indexParent : indexChild;
             int indexEnd = indexParent > indexChild ? indexParent : indexChild;
-            for (int i = indexStart + 1; i < indexEnd; i++)
+            if (((string)celllist[indexStart].Text).Trim().EndsWith(":"))
+                return 4; //End with separator
+            for (int i = indexStart; i <= indexEnd; i++)
             {
                 string value = (string)celllist[i].Text;
                 if (value == null) continue;
-                if (value.ToLower().Contains("total") || value.ToLower().Contains(":"))
-                {
+                if ((i == indexStart) && (isContainsStopWord(value)))
+                    return 2; // Stop word at start index
+                else if ((i == indexEnd) && (isContainsStopWord(value)))
+                    return 3; //Stop word at end index
+                else if ((isContainsStopWord(value) ||  (value.EndsWith(":"))) && (i > indexStart) && (i < indexEnd))
                     return 1;
-                }
+
             }
             return 0;
         }
@@ -227,13 +266,19 @@ namespace Senbazuru.HirarchicalExtraction
         // Has Italic is different
         public int BFeatureItalicDiffer(IList<Range> celllist, int indexParent, int indexChild)
         {
-            return celllist[indexParent].Font.Italic == celllist[indexChild].Font.Italic ? 0 : 1;
+            if (celllist[indexParent].Font.Italic is bool && celllist[indexChild].Font.Italic is bool)
+                return celllist[indexParent].Font.Italic == celllist[indexChild].Font.Italic ? 0 : 1;
+            else
+                return 0;
         }
 
         // Has Underline is different
         public int BFeatureUnderlineDiffer(IList<Range> celllist, int indexParent, int indexChild)
         {
-            return celllist[indexParent].Font.Underline == celllist[indexChild].Font.Underline ? 0 : 1;
+            if (celllist[indexParent].Font.Underline is bool && celllist[indexChild].Font.Underline is bool)
+                return celllist[indexParent].Font.Underline == celllist[indexChild].Font.Underline ? 0 : 1;
+            else 
+                return 0;
         }
 
 
@@ -282,19 +327,23 @@ namespace Senbazuru.HirarchicalExtraction
         //Background differnce 
         public int BFeatureBackgroundDiffer(IList<Range> celllist, int indexParent, int indexChild)
         {
-            return (celllist[indexParent].Interior.ColorIndex != celllist[indexChild].Interior.ColorIndex) ? 1 : 0;
+            int parentColor = celllist[indexParent].Interior.ColorIndex;
+            int childColor = celllist[indexChild].Interior.ColorIndex;
+            if (parentColor == 2) parentColor = -4142; //If color is white set none color background for parent cell
+            if (childColor == 2) childColor = -4142; //If color is white set none color background for child cell
+            return (parentColor!= childColor) ? 1 : 0;
 
         }
         //Parent cell in empty
         public int BFeatureParentIsEmptyCell(IList<Range> celllist, int indexParent, int indexChild)
         {
-            string cellValue = (celllist[indexParent].Text as string);
+            string cellValue = (celllist[indexParent].Text as string).Trim();
             return cellValue.Length == 0 ? 1 : 0;
         }
         //Child cell in empty
         public int BFeatureChildIsEmptyCell(IList<Range> celllist, int indexParent, int indexChild)
         {
-            string cellValue = (celllist[indexChild].Text as string);
+            string cellValue = (celllist[indexChild].Text as string).Trim();
             return cellValue.Length == 0 ? 1 : 0;
         }
 
@@ -303,17 +352,86 @@ namespace Senbazuru.HirarchicalExtraction
         {
             int indexStart = indexParent < indexChild ? indexParent : indexChild;
             int indexEnd = indexParent > indexChild ? indexParent : indexChild;
-            for (int i = indexStart + 1; i < indexEnd; i++)
+            for (int i = indexStart+1; i < indexEnd; i++)
             {
                 string parent = celllist[indexParent].Text;
+                int parentIdent = parent.Length - parent.TrimStart().Length;
                 string child = celllist[indexChild].Text;
+                int childIdent = child.Length - child.TrimStart().Length; 
                 string middle = celllist[i].Text;
-                if ((celllist[indexParent].IndentLevel < celllist[indexChild].IndentLevel) && (celllist[i].IndentLevel < celllist[indexChild].IndentLevel))
+                int middleIdent = middle.Length - middle.TrimStart().Length; 
+                if ((parentIdent<childIdent) && (middleIdent < childIdent))
+                //if ((celllist[indexParent].IndentLevel < celllist[indexChild].IndentLevel) && (celllist[i].IndentLevel < celllist[indexChild].IndentLevel))
                     return 1;
 
             }
             return 0;
         }
+
+        public int BFeatureHorisontalAligmentDifferent(IList<Range> celllist, int indexParent, int indexChild) {
+            
+            if ((celllist[indexParent].HorizontalAlignment == null) || (celllist[indexChild].HorizontalAlignment == null))
+                return 0;
+            int haParent = celllist[indexParent].HorizontalAlignment;
+            int haChild = celllist[indexChild].HorizontalAlignment;
+            if (haParent == 1)
+                haParent = -4131;
+            if (haChild == 1)
+                haChild = -4131;
+
+            if ((celllist[indexParent].HorizontalAlignment != null) && (celllist[indexChild].HorizontalAlignment != null)
+                    && (haParent != haChild)
+                    ) return 1;
+                return 0;
+        }
+        public int BFeatureVerticalAligmentDifferent(IList<Range> celllist, int indexParent, int indexChild)
+        {
+            if ((celllist[indexParent].VerticalAlignment != null) && (celllist[indexChild].VerticalAlignment != null)
+                && (celllist[indexParent].VerticalAlignment != celllist[indexChild].VerticalAlignment)
+                ) return 1;
+            return 0;
+        }
+
+        public int BFeatureDataTypeDifferent(IList<Range> celllist, int indexParent, int indexChild) 
+        {
+            int getType(string[] cellText) {
+                int res = -1;
+                int cellType;
+                foreach (string s in cellText) {
+                    if (s.Equals(""))
+                        continue;
+                    string type = this.getValueType(s);
+                    if ((type.Equals("int")) || (type.Equals("double")))
+                        cellType = 1;
+                    else
+                        cellType = 0;
+                    if (res == -1)
+                        //First cell words data type detection
+                        res = cellType;
+                    else if (res != cellType)
+                        //Cell has different words data types
+                        return 2;
+                }
+                return res;
+            }
+            
+            char[] spitChars = { ' ', ',', '.'};
+            string[] strParent = (celllist[indexParent].Text.Trim()).Split(spitChars);
+            string[] strChild = (celllist[indexChild].Text.Trim()).Split(spitChars);
+            int typeParent = getType(strParent);
+            int typeChild = getType(strChild);
+            if (typeParent == typeChild)
+                //Types are equial
+                return 0;
+            else if (((typeParent == 0) && (typeChild == 1)) || ((typeParent == 1) && (typeChild == 0)))
+                //Types are different
+                return 1;
+            else
+                //Data have mixed types
+                return 2;
+
+        }
+
 
         /*Below are auxiliary method*/
         private string getValueType(string cellValue)

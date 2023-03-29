@@ -28,16 +28,17 @@ namespace Senbazuru.HirarchicalExtraction
             this.AnotationPairConstruction(AttributeRange, sheet, indexPairList);
             this.AnotationPairEdgeConstruction(false);
             this.NodeFeatureVectorConstruction();
-            this.EdgeFeatureVectorConstruction();
+            //this.EdgeFeatureVectorConstruction();
             this.sheet = sheet;
         }
 
         public FeatureConstructer(Worksheet sheet, Range AttributeRange, bool sampleConstruction = false)
         {
             this.AnotationPairConstruction(AttributeRange, sheet, sampleConstruction);
-            this.AnotationPairEdgeConstruction(false);
+            //Comment for debug heuristic method
+            //this.AnotationPairEdgeConstruction(false);
             this.NodeFeatureVectorConstruction();
-            this.EdgeFeatureVectorConstruction();
+            //this.EdgeFeatureVectorConstruction();
             this.sheet = sheet;
         }
 
@@ -147,30 +148,112 @@ namespace Senbazuru.HirarchicalExtraction
 
         private void NodeFeatureVectorConstruction()
         {
-            ModelFeatures Features = new ModelFeatures();
+            //Meximum time of operations (debug only)
+            TimeSpan findMax(IList<TimeSpan> items) { 
+                TimeSpan max = TimeSpan.MinValue;
+                foreach (TimeSpan item in items) { 
+                    if (item > max)
+                        max = item;
+                }
+                return max;
+            }
 
+            ModelFeatures Features = new ModelFeatures();
+            DateTime t1;
+            DateTime t2;
+            List<TimeSpan> t3;
             for (int i = 0; i < anotationPairList.Count; i++)
             {
-                Console.WriteLine(i + "th pair constructed!");
+                //Console.WriteLine(i + "th pair constructed!");
                 List<int> featureVector = new List<int>();
-                featureVector.Add(Features.BFeatureAdjacent(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureBlankCellMiddle(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureChildindentationGreater(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureChildindexGreater(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureChildSizeSmaller(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureContainColonAndTotal(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureIndentationLarger(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureIndentationMiddle(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureIndentationShorter(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureParentRoot(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureStyleAdjacent(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureBoldDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureItalicDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureUnderlineDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureBackgroundDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureParentIsEmptyCell(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureChildIsEmptyCell(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
-                featureVector.Add(Features.BFeatureIndentationDifferent(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild));
+                //Console.WriteLine("----");
+                t3 = new List<TimeSpan>();
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureAdjacent(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //0
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1= DateTime.Now;
+                featureVector.Add(Features.BFeatureBlankCellMiddle(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //1
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureChildindentationGreater(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //2
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureChildindexGreater(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //3
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureChildSizeSmaller(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //4
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureContainColonAndTotal(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //5
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureIndentationLarger(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //6
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureIndentationMiddle(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //7
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureIndentationShorter(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //8
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureParentRoot(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //9
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureStyleAdjacent(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //10
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureBoldDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //11
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureItalicDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //12
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureUnderlineDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //13
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureBackgroundDiffer(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //14
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureParentIsEmptyCell(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //15
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureChildIsEmptyCell(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //16
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureIndentationDifferent(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //17
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureHorisontalAligmentDifferent(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //18
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureVerticalAligmentDifferent(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //19
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                t1 = DateTime.Now;
+                featureVector.Add(Features.BFeatureDataTypeDifferent(this.celllist, anotationPairList[i].indexParent, anotationPairList[i].indexChild)); //20
+                t2 = DateTime.Now;
+                t3.Add(t2 - t1);
+                //Output of Debug information
+                //Console.WriteLine(String.Format("Max time {0} for feature {1}", findMax(t3), t3.IndexOf(findMax(t3))));
 
                 NodePotentialFeatureVector nodepotentialfeaturevector = new NodePotentialFeatureVector(featureVector);
                 anotationPairList[i].nodepotentialfeaturevector = nodepotentialfeaturevector;
